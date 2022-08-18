@@ -1,0 +1,210 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-08-18T01:41:23.050662+00:00",
+  "repo": "mlswg/mls-extensions",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOHZoI5M479E8G",
+      "title": "Targeted messages draft",
+      "url": "https://github.com/mlswg/mls-extensions/pull/1",
+      "state": "OPEN",
+      "author": "raphaelrobert",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "raphaelrobert"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-22T14:36:35Z",
+      "updatedAt": "2022-08-10T12:02:24Z",
+      "baseRepository": "mlswg/mls-extensions",
+      "baseRefName": "main",
+      "baseRefOid": "87eff2a22db8663171ceacdcf2edce2a01183f00",
+      "headRepository": "mlswg/mls-extensions",
+      "headRefName": "targeted-messages",
+      "headRefOid": "cef89c326c189f788e83d5649c55318c8589f310",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOHZoI5M4_Ytkr",
+          "commit": {
+            "abbreviatedOid": "14f5567"
+          },
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "Some first comments.\r\nThe general approach looks fine. But I'm a little worried about the way the encryption and authentication work together. Maybe you can work out a little better what the security (confidentiality and authentication) guarantees should be for targeted messages (also compared to regular MLS application messages). They are not entirely clear to me.",
+          "createdAt": "2022-08-05T14:24:18Z",
+          "updatedAt": "2022-08-08T11:28:24Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\r\nThis extensions introduces a new message type to the MLS protocol,\r\n```",
+              "createdAt": "2022-08-05T14:24:19Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "It's worth noting that the signature/hpke scheme is the same as the one defined in the MLS ciphersuite of the group. I could imagine using a different mechanism for the signature here for example.",
+              "createdAt": "2022-08-08T10:58:00Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 118,
+              "body": "So this is only needed when using signatures, right?",
+              "createdAt": "2022-08-08T10:59:15Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 140,
+              "body": "Why not allow `mode_auth`?",
+              "createdAt": "2022-08-08T11:14:19Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 149,
+              "body": "Is the idea that the PSK binds the message to an epoch? The security properties are a little unclear because the HPKE key is a relatively long-lived key but this one is not.\r\nReading further it looks like you really want to use PSK (encryption) and want use HPKE/Signature (authentication) only for authentication? This doesn't become clear from the text. I thought you were doing HPKE (encryption) + hpke_auth/signature (authentication). But then the encryption is always HPKE (not PSK), which makes me very confused.",
+              "createdAt": "2022-08-08T11:17:02Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 155,
+              "body": "Using `HPKEAuth` when it is actually `HPKEAuthPsk` is a little confusing.",
+              "createdAt": "2022-08-08T11:17:24Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            },
+            {
+              "originalPosition": 160,
+              "body": "You should mention somewhere that `SealAuthPSK` etc. are from RFC 9180.",
+              "createdAt": "2022-08-08T11:18:41Z",
+              "updatedAt": "2022-08-08T11:28:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHZoI5M4_kJxz",
+          "commit": {
+            "abbreviatedOid": "14f5567"
+          },
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks for the review, I hope my comments clarify things.",
+          "createdAt": "2022-08-09T09:56:37Z",
+          "updatedAt": "2022-08-09T10:02:53Z",
+          "comments": [
+            {
+              "originalPosition": 149,
+              "body": "We could drop the PSK part, but that would be unnecessarily weak because all security guarantees would only depend on the HPKE keys. Using the PSK gives us a pretty efficient way to couple targeted messages with the key schedule of the base protocol to achieve the following guarantees:\r\n\r\n - FS & PCS that we have between epochs\r\n - Better confidentiality, meaning a passive attacker must compromise the group state as well, not just the HPKE key\r\n - Proof of membership, meaning an active attacker must compromise the group state as well, not just the HPKE key\r\n\r\nSo in other words, we always use HPKE + PSK for encryption. For authentication, we always use PSK, and additionally either HPKEAuth or signatures. The latter is really either `mode_auth_psk` or `mode_psk + Signature`.",
+              "createdAt": "2022-08-09T09:56:38Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            },
+            {
+              "originalPosition": 140,
+              "body": "See the comment below.",
+              "createdAt": "2022-08-09T09:57:13Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            },
+            {
+              "originalPosition": 118,
+              "body": "That's correct",
+              "createdAt": "2022-08-09T10:00:20Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            },
+            {
+              "originalPosition": 160,
+              "body": "Good point.",
+              "createdAt": "2022-08-09T10:00:37Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            },
+            {
+              "originalPosition": 155,
+              "body": "I see how that's confusing. I left out the PSK part because it is common to both authentication modes and therefore not a differentiator. I'll try to think of a better name.",
+              "createdAt": "2022-08-09T10:02:00Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "Good point.",
+              "createdAt": "2022-08-09T10:02:18Z",
+              "updatedAt": "2022-08-09T10:02:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHZoI5M4_qsIE",
+          "commit": {
+            "abbreviatedOid": "cef89c3"
+          },
+          "author": "franziskuskiefer",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-08-10T12:01:46Z",
+          "updatedAt": "2022-08-10T12:02:24Z",
+          "comments": [
+            {
+              "originalPosition": 149,
+              "body": "I'm all for using PSK here \ud83d\ude42 \r\nMy main point is that it needs to become clear where the security is coming from and how the different things work together.\r\nThe PSK in HPKE is only used for the key schedule, not the KEM. Hence, the encapsulation is independent of the PSK and only dependent on the long-lived HPKE key. The encryption happens with the key from the HPKE key schedule that includes the PSK.\r\n\r\nSo I'd suggest to add your explanations about the security guarantees and some basic explanation (like the one above) for how the PSK is used in HPKE (to make it clear where the security properties come from).",
+              "createdAt": "2022-08-10T12:01:46Z",
+              "updatedAt": "2022-08-10T12:02:24Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
