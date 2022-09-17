@@ -9,11 +9,11 @@
 <meta content="
        This document describes extensions to the Messaging Layer Security (MLS) protocol. 
     " name="description">
-<meta content="xml2rfc 3.13.1" name="generator">
+<meta content="xml2rfc 3.14.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-robert-mls-extensions-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.13.1
+  xml2rfc 3.14.2
     Python 3.10.5
     appdirs 1.4.4
     ConfigArgParse 1.5.3
@@ -25,7 +25,6 @@
     lxml 4.9.1
     MarkupSafe 2.1.1
     pycountry 22.3.5
-    pyflakes 2.4.0
     PyYAML 6.0
     requests 2.27.1
     setuptools 59.4.0
@@ -366,23 +365,37 @@ ul.empty li, .ulEmpty li {
 
 /* definition lists */
 dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
 }
 dl > dt {
   float: left;
   margin-right: 1em;
+  min-width: 20ch;
+}
+dl.dlNewline > dt {
+  float: none;
 }
 dl > dd {
   margin-bottom: .8em;
-  min-height: 1.3em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
 }
 :is(dl.compact, .dlCompact) > dd {
-  margin-bottom: 0em;
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
 }
 dl > dd > dl {
   margin-top: 0.5em;
-  margin-bottom: 0em;
+  margin-bottom: 0;
 }
-dd.break {
+dl .break {
   display: none;
 }
 
@@ -577,17 +590,18 @@ hr {
   margin: 0;
   font-size: var(--small-font-size);
   line-height: 18px;
-  --identifier-width: 8em;
+  --identifier-width: 15ch;
 }
 #identifiers dt {
   width: var(--identifier-width);
-  margin: 0;
+  min-width: var(--identifier-width);
   clear: left;
   float: left;
   text-align: right;
 }
 #identifiers dd {
-  margin: 0 0 0 calc(1em + var(--identifier-width));
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
   min-width: 5em;
 }
 #identifiers .authors .author {
@@ -643,7 +657,7 @@ hr {
   margin: 0 10px 0 -25px;
 }
 .references dd {
-  margin-left: 8em;
+  margin-left: 8em !important;
   overflow: auto;
 }
 
@@ -910,16 +924,6 @@ a.toplink {
   margin: 8px 0.5em 0;
 }
 
-/* Fix the dl styling to match the RFC 7992 attributes */
-dl > dt,
-dl.dlParallel > dt {
-  float: left;
-  margin-right: 1em;
-}
-dl.dlNewline > dt {
-  float: none;
-}
-
 /* Provide styling for table cell text alignment */
 table .text-left {
   text-align: left;
@@ -1031,11 +1035,11 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">MLS</td>
-<td class="right">August 2022</td>
+<td class="right">September 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Robert</td>
-<td class="center">Expires 10 February 2023</td>
+<td class="center">Expires 21 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1048,12 +1052,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-robert-mls-extensions-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-08-09" class="published">9 August 2022</time>
+<time datetime="2022-09-17" class="published">17 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-02-10">10 February 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-21">21 March 2023</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1094,7 +1098,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 February 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1154,6 +1158,9 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.5">
                     <p id="section-toc.1-1.2.2.2.2.5.1"><a href="#section-2.2.5" class="xref">2.2.5</a>.  <a href="#name-guidance-on-authentication-" class="xref">Guidance on authentication schemes</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.6">
+                    <p id="section-toc.1-1.2.2.2.2.6.1"><a href="#section-2.2.6" class="xref">2.2.6</a>.  <a href="#name-security-considerations" class="xref">Security considerations</a></p>
 </li>
                 </ul>
 </li>
@@ -1293,6 +1300,7 @@ message that is sent from a member of an existing group to another member of
 that group.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.1-3">The goal is to provide a one-shot messaging mechanism that provides
 confidentiality and authentication.<a href="#section-2.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-4">Targeted Messages reuse mechanisms from <span>[<a href="#mls-protocol" class="xref">mls-protocol</a>]</span>, in particular <span>[<a href="#hpke" class="xref">hpke</a>]</span>.<a href="#section-2.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="format">
@@ -1335,15 +1343,15 @@ struct {
 } TargetedMessage;
 
 enum {
-  HPKEAuth,
-  Signature,
+  HPKEAuthPsk,
+  SignatureHPKEPsk,
 } TargetedMessageAuthScheme;
 
 struct {
   TargetedMessageAuthScheme authentication_scheme;
   select (authentication_scheme) {
-    case HPKEAuth:
-    case Signature:
+    case HPKEAuthPsk:
+    case SignatureHPKEPsk:
       opaque signature&lt;V&gt;;
   }
   HPKECiphertext ciphertext;
@@ -1370,6 +1378,8 @@ struct {
 } PSKId;
 </pre><a href="#section-2.2.2-4" class="pilcrow">¶</a>
 </div>
+<p id="section-2.2.2-5">Note that <code>TargetedMessageTBS</code> is only used with the
+<code>TargetedMessageAuthScheme.SignatureHPKEPsk</code> authentication mode.<a href="#section-2.2.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encryption">
@@ -1400,13 +1410,15 @@ for more information.<a href="#section-2.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.4-3"><code>
 targeted_message_psk = MLS-Exporter("targeted message psk", "", KDF.Nh)
 </code><a href="#section-2.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.4-4">Th functions <code>SealAuth</code> and <code>OpenAuth</code> are defined in <span>[<a href="#hpke" class="xref">hpke</a>]</span>. Other functions
+are defined in <span>[<a href="#mls-protocol" class="xref">mls-protocol</a>]</span>.<a href="#section-2.2.4-4" class="pilcrow">¶</a></p>
 <div id="authentication-with-hpke">
 <section id="section-2.2.4.1">
             <h5 id="name-authentication-with-hpke">
 <a href="#section-2.2.4.1" class="section-number selfRef">2.2.4.1. </a><a href="#name-authentication-with-hpke" class="section-name selfRef">Authentication with HPKE</a>
             </h5>
 <p id="section-2.2.4.1-1">The sender MUST set the authentication scheme to
-<code>TargetedMessageAuthScheme.HPKEAuth</code>.<a href="#section-2.2.4.1-1" class="pilcrow">¶</a></p>
+<code>TargetedMessageAuthScheme.HPKEAuthPsk</code>.<a href="#section-2.2.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.4.1-2">The sender then computes the following:<a href="#section-2.2.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.4.1-3"><code>
 hpke_ciphertext = SealAuthPSK(receiver_node_public_key, group_context, targeted_message_tbm, message, targeted_message_psk, psk_id, sender_node_private_key)
@@ -1423,7 +1435,9 @@ message = OpenAuthPSK(hpke_ciphertext.enc, receiver_node_private_key, group_cont
 <a href="#section-2.2.4.2" class="section-number selfRef">2.2.4.2. </a><a href="#name-authentication-with-signatu" class="section-name selfRef">Authentication with signatures</a>
             </h5>
 <p id="section-2.2.4.2-1">The sender MUST set the authentication scheme to
-<code>TargetedMessageAuthScheme.Signature</code>.<a href="#section-2.2.4.2-1" class="pilcrow">¶</a></p>
+<code>TargetedMessageAuthScheme.SignatureHPKEPsk</code>. The signature is done using the
+<code>signature_key</code> of the sender's <code>LeafNode</code> and the corresponding signature
+scheme used in the group.<a href="#section-2.2.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.4.2-2">The sender then computes the following:<a href="#section-2.2.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.4.2-3">```
 hpke_ciphertext = SealPSK(receiver_node_public_key, group_context, targeted_message_tbm, message, targeted_message_psk, epoch)<a href="#section-2.2.4.2-3" class="pilcrow">¶</a></p>
@@ -1447,11 +1461,27 @@ VerifyWithLabel.verify(sender_leaf_node.signature_key, "targeted message", targe
 <a href="#section-2.2.5" class="section-number selfRef">2.2.5. </a><a href="#name-guidance-on-authentication-" class="section-name selfRef">Guidance on authentication schemes</a>
           </h4>
 <p id="section-2.2.5-1">If the group's ciphersuite does not support HPKE <code>mode_auth_psk</code>,
-implementations MUST choose <code>TargetedMessageAuthScheme.Signature</code>.<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
+implementations MUST choose <code>TargetedMessageAuthScheme.SignatureHPKEPsk</code>.<a href="#section-2.2.5-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.5-2">If the group's ciphersuite does support HPKE <code>mode_auth_psk</code>, implementations
-CAN choose <code>TargetedMessageAuthScheme.HPKEAuth</code> if better efficiency and/or
+CAN choose <code>TargetedMessageAuthScheme.HPKEAuthPsk</code> if better efficiency and/or
 repudiability is desired. Implementations SHOULD consult
 <span>[<a href="#hpke-security-considerations" class="xref">hpke-security-considerations</a>]</span> beforehand.<a href="#section-2.2.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-2.2.6">
+          <h4 id="name-security-considerations">
+<a href="#section-2.2.6" class="section-number selfRef">2.2.6. </a><a href="#name-security-considerations" class="section-name selfRef">Security considerations</a>
+          </h4>
+<p id="section-2.2.6-1">In addition to the sender authentication, Targeted Messages are authenticated by
+using a preshared key (PSK) between the sender and the recipient. The PSK is
+exported from the group key schedule using the label "targeted message psk".
+This ensures that the PSK is only valid for a specific group and epoch, and the
+Forward Secrecy and Post-Compromise Security guarantees of the group key
+schedule apply to the targeted messages as well. The PSK also ensures that an
+attacker needs access to the private group state in addition to the
+HPKE/signature's private keys. This improves confidentiality guarantees against
+passive attackers and authentication guarantees against active attackers.<a href="#section-2.2.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1610,6 +1640,10 @@ to have its <code>path</code> field populated.<a href="#section-3.2-3.4" class="
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="hpke">[hpke]</dt>
+        <dd>
+<span class="refTitle">"Hybrid Public Key Encryption"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180.html%5D(https://www.rfc-editor.org/rfc/rfc9180.html">https://www.rfc-editor.org/rfc/rfc9180.html](https://www.rfc-editor.org/rfc/rfc9180.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="hpke-security-considerations">[hpke-security-considerations]</dt>
         <dd>
 <span class="refTitle">"HPKE Security Considerations"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180.html#name-key-compromise-impersonatio%5D(https://www.rfc-editor.org/rfc/rfc9180.html#name-key-compromise-impersonatio">https://www.rfc-editor.org/rfc/rfc9180.html#name-key-compromise-impersonatio](https://www.rfc-editor.org/rfc/rfc9180.html#name-key-compromise-impersonatio</a>&gt;</span>. </dd>
