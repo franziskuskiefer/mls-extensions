@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-15T01:51:04.780199+00:00",
+  "timestamp": "2022-09-18T01:56:51.082760+00:00",
   "repo": "mlswg/mls-extensions",
   "labels": [
     {
@@ -65,13 +65,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2022-07-22T14:36:35Z",
-      "updatedAt": "2022-08-10T12:02:24Z",
+      "updatedAt": "2022-09-17T11:57:49Z",
       "baseRepository": "mlswg/mls-extensions",
       "baseRefName": "main",
       "baseRefOid": "87eff2a22db8663171ceacdcf2edce2a01183f00",
       "headRepository": "mlswg/mls-extensions",
       "headRefName": "targeted-messages",
-      "headRefOid": "cef89c326c189f788e83d5649c55318c8589f310",
+      "headRefOid": "4d67e138c8308f9c420d9f68737c7521a909f85f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
