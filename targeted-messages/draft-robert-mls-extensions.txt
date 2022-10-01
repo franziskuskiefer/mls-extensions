@@ -3,9 +3,9 @@
 
 
 Network Working Group                                          R. Robert
-Internet-Draft                                         17 September 2022
+Internet-Draft                                            1 October 2022
 Intended status: Informational                                          
-Expires: 21 March 2023
+Expires: 4 April 2023
 
 
              The Messaging Layer Security (MLS) Extensions
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 March 2023.
+   This Internet-Draft will expire on 4 April 2023.
 
 Copyright Notice
 
@@ -300,7 +300,7 @@ Table of Contents
    group_context, targeted_message_tbm, message, targeted_message_psk,
    epoch)
 
-   signature = SignWithLabel(., "targeted message",
+   signature = SignWithLabel(., "TargetedMessageTBS",
    targeted_message_tbs) ```
 
    The recipient computes the following:
@@ -311,8 +311,8 @@ Table of Contents
 
    The recipient MUST verify the message authentication:
 
-   VerifyWithLabel.verify(sender_leaf_node.signature_key, "targeted
-   message", targeted_message_tbs, signature)
+   VerifyWithLabel.verify(sender_leaf_node.signature_key,
+   "TargetedMessageTBS", targeted_message_tbs, signature)
 
 2.2.5.  Guidance on authentication schemes
 
