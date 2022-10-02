@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-29T01:49:08.440901+00:00",
+  "timestamp": "2022-10-02T01:49:46.386600+00:00",
   "repo": "mlswg/mls-extensions",
   "labels": [
     {
@@ -65,18 +65,26 @@
       "labels": [],
       "body": "",
       "createdAt": "2022-07-22T14:36:35Z",
-      "updatedAt": "2022-09-17T11:57:49Z",
+      "updatedAt": "2022-10-01T17:24:05Z",
       "baseRepository": "mlswg/mls-extensions",
       "baseRefName": "main",
       "baseRefOid": "87eff2a22db8663171ceacdcf2edce2a01183f00",
       "headRepository": "mlswg/mls-extensions",
       "headRefName": "targeted-messages",
-      "headRefOid": "4d67e138c8308f9c420d9f68737c7521a909f85f",
+      "headRefOid": "2cb32fa3328d9be7c244ea91839b20ceefffc7a9",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "raphaelrobert",
+          "authorAssociation": "MEMBER",
+          "body": "> I don't exactly understand how things work: how do we obtain the value `encrypted_targeted_message_content`? Is there two layers of encryptions, since TargetMessageContent is encrypted and contains an `HPKECiphertext`?\r\n\r\nThanks for the review @TWal! There was a part missing, that actually turned out to not be as trivial and I made some more changes. I think that it should be more explicit now. Originally, I thought it could be more similar to `MLSCiphertext`, but it turns out that doesn't work.\r\nI think there's more than one way of doing it, right now I mostly wanted to avoid double encryption. Maybe you find a more elegant way to separate the different nested structs.",
+          "createdAt": "2022-10-01T17:24:05Z",
+          "updatedAt": "2022-10-01T17:24:05Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOHZoI5M4_Ytkr",
@@ -201,6 +209,38 @@
               "body": "I'm all for using PSK here \ud83d\ude42 \r\nMy main point is that it needs to become clear where the security is coming from and how the different things work together.\r\nThe PSK in HPKE is only used for the key schedule, not the KEM. Hence, the encapsulation is independent of the PSK and only dependent on the long-lived HPKE key. The encryption happens with the key from the HPKE key schedule that includes the PSK.\r\n\r\nSo I'd suggest to add your explanations about the security guarantees and some basic explanation (like the one above) for how the PSK is used in HPKE (to make it clear where the security properties come from).",
               "createdAt": "2022-08-10T12:01:46Z",
               "updatedAt": "2022-08-10T12:02:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHZoI5M5DFqFd",
+          "commit": {
+            "abbreviatedOid": "4d67e13"
+          },
+          "author": "TWal",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "I don't exactly understand how things work: how do we obtain the value `encrypted_targeted_message_content`?\r\nIs there two layers of encryptions, since TargetMessageContent is encrypted and contains an `HPKECiphertext`?",
+          "createdAt": "2022-09-29T15:46:17Z",
+          "updatedAt": "2022-09-29T16:25:58Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "Usually, enums are in snake_case and have explicit numbers associated with them",
+              "createdAt": "2022-09-29T15:46:17Z",
+              "updatedAt": "2022-09-29T16:25:58Z"
+            },
+            {
+              "originalPosition": 193,
+              "body": "```suggestion\r\nsignature = SignWithLabel(., \"TargetedMessageTBS\", targeted_message_tbs)\r\n```\r\nfor consistency with the rest of MLS",
+              "createdAt": "2022-09-29T15:46:33Z",
+              "updatedAt": "2022-09-29T16:25:58Z"
+            },
+            {
+              "originalPosition": 205,
+              "body": "```suggestion\r\nVerifyWithLabel.verify(sender_leaf_node.signature_key, \"TargetedMessageTBS\", targeted_message_tbs, signature)\r\n```\r\nfor consistency with the rest of MLS",
+              "createdAt": "2022-09-29T15:46:59Z",
+              "updatedAt": "2022-09-29T16:25:58Z"
             }
           ]
         }
